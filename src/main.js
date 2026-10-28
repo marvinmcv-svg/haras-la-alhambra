@@ -304,40 +304,63 @@ if (!reduceMotion) {
     onLeaveBack: () => skewTo(0),
   });
 
-  /* ---------- Slow-motion chapters: pinned crossfade ---------- */
+  /* ---------- A day at La Alhambra: pinned crossfade with slow push-ins ---------- */
   const layers = $$('.slowmo__layer');
   const captions = $$('.slowmo__caption');
   const dots = $$('.slowmo__dots i');
-  const videos = layers.map((l) => l.querySelector('video'));
-  videos.forEach((v) => {
-    v.addEventListener('loadedmetadata', () => { v.playbackRate = 0.5; });
-    v.playbackRate = 0.5;
-  });
-  const playOnly = (i) => videos.forEach((v, j) => {
+  const frames = layers.map((l) => l.querySelector('img, video'));
+  // Any clip dropped into a layer plays at half speed, only while its chapter is on screen.
+  const playOnly = (i) => frames.forEach((v, j) => {
+    if (v.tagName !== 'VIDEO') return;
     if (j === i) { v.playbackRate = 0.5; v.play().catch(() => {}); } else v.pause();
   });
+  let activeLayer = -1;
   const slowTl = gsap.timeline({
     scrollTrigger: {
       trigger: '.slowmo', start: 'top top', end: '+=300%', scrub: 1, pin: '.slowmo__stage', anticipatePin: 1,
-      onEnter: () => playOnly(0), onEnterBack: () => playOnly(0),
+      onEnter: () => playOnly(0), onEnterBack: () => playOnly(activeLayer),
       onLeave: () => playOnly(-1), onLeaveBack: () => playOnly(-1),
       onUpdate: (self) => {
         const p = self.progress * layers.length;
         dots.forEach((d, i) => d.style.setProperty('--p', gsap.utils.clamp(0, 1, p - i)));
         const active = Math.min(layers.length - 1, Math.floor(p));
-        if (active !== slowTl._active) { slowTl._active = active; playOnly(active); }
+        if (active !== activeLayer) { activeLayer = active; playOnly(active); }
       },
     },
   });
   layers.forEach((layer, i) => {
-    const vid = videos[i];
-    slowTl.fromTo(vid, { scale: 1.15 }, { scale: 1, ease: 'none', duration: 1 }, i);
+    slowTl.fromTo(frames[i], { scale: 1.18, xPercent: i % 2 ? 2 : -2 }, { scale: 1, xPercent: 0, ease: 'none', duration: 1.3 }, Math.max(0, i - 0.3));
     if (i === 0) return;
     slowTl
       .fromTo(layer, { opacity: 0, clipPath: 'inset(0% 0% 0% 100%)' }, { opacity: 1, clipPath: 'inset(0% 0% 0% 0%)', ease: 'power2.inOut', duration: 0.6 }, i - 0.3)
       .to(captions[i - 1], { opacity: 0, y: -40, ease: 'power2.in', duration: 0.3 }, i - 0.3)
       .fromTo(captions[i], { opacity: 0, y: 40 }, { opacity: 1, y: 0, ease: 'power2.out', duration: 0.3 }, i);
   });
+
+  /* ---------- Nights: zoom through the grid into the centre frame ---------- */
+  const grid = $('.nights__grid');
+  const centre = $('.nights__tile--center');
+  const outer = $$('.nights__tile:not(.nights__tile--center)');
+  // Scaling the whole grid about its centre makes the middle tile cover the viewport.
+  const coverScale = () => Math.max(window.innerWidth / centre.offsetWidth, window.innerHeight / centre.offsetHeight) * 1.02;
+  $$('.nights__tile').forEach((tile, i) => {
+    gsap.from(tile, {
+      clipPath: 'inset(100% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut', delay: (i % 3) * 0.08 + Math.floor(i / 3) * 0.08,
+      scrollTrigger: { trigger: '.nights', start: 'top 75%', once: true },
+    });
+  });
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '.nights__stage', start: 'top top', end: '+=220%', scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+    },
+  })
+    .to(grid, { scale: coverScale, ease: 'power2.inOut', duration: 1 }, 0)
+    .fromTo(centre.querySelector('img'), { scale: 1.3 }, { scale: 1, ease: 'none', duration: 1 }, 0)
+    .to(centre, { borderRadius: 0, duration: 0.6 }, 0.4)
+    .to(outer, { opacity: 0, duration: 0.5, stagger: { each: 0.03, from: 'center' } }, 0.25)
+    .to('.nights__overlay', { opacity: 1, duration: 0.3 }, 0.85)
+    .from('.nights__overlay > *', { y: 50, opacity: 0, stagger: 0.08, duration: 0.35 }, 0.85)
+    .to({}, { duration: 0.35 });
 
   /* ---------- C.E.L.A.: cursor-tracking floating image ---------- */
   if (finePointer) {

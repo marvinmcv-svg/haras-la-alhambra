@@ -1,20 +1,22 @@
 # Media
 
-Drop files here with these exact names. Until a file exists, the site shows a
-labelled placeholder in its place, so nothing breaks.
+All photos and video come from the Haras La Alhambra media folder on Google Drive,
+cropped for their slot and compressed to WebP (video: H.264 MP4, faststart, no audio).
+To replace one, export a file with the same name and aspect, and keep each image ≲300 KB.
 
-| File | Where | Suggested |
+| File | Where | Source |
 | --- | --- | --- |
-| `hero.mp4` + `hero.jpg` (poster) | Opening full-screen video, closes into the arch | 1920×1080, 8–15 s loop, slow motion, < 6 MB, no audio |
-| `origen.jpg` | Chapter I, arch portrait | Mare and foal, vertical 4:5 |
-| `arabe.jpg` | Bloodlines: Purebred Arabian | Vertical 3:4, head/profile |
-| `pre.jpg` | Bloodlines: P.R.E. | Vertical 3:4, mane in motion |
-| `hispano.jpg` | Bloodlines: Hispano-Arabian | Vertical 3:4, under saddle |
-| `filosofia.jpg` | Chapter III, wide banner | 21:9 landscape, hands on a horse |
-| `haras-1.jpg`, `haras-2.jpg`, `haras-3.jpg` | Chapter IV collage | Fields, stables, indoor arena |
-| `slow-1.mp4`…`slow-3.mp4` + `slow-1.jpg`…`slow-3.jpg` | "A day at La Alhambra" pinned chapters | Dawn in the fields, arena work, horses loose at dusk. Played at 0.5× speed |
-| `cela-escuela.jpg`, `cela-instruccion.jpg`, `cela-entrenamiento.jpg`, `cela-pension.jpg`, `cela-pistas.jpg`, `cela-paddocks.jpg` | Equestrian Center list (image follows the cursor) | Vertical 4:5 |
-| `visita.jpg` | Visit section background | Landscape, entrance or fields at golden hour |
+| `hero.mp4`, `hero.jpg` | Opening film (closes into the arch) | `rainy-days.mp4`, `video-poster-rain.jpg` |
+| `origen.webp` | Chapter I arch portrait (4:5) | `eye-macro.jpg` |
+| `arabe.webp`, `pre.webp`, `hispano.webp` | Bloodlines panels (3:4) | `ig-field-palms`, `facility-paddock-palms`, `ig-champion` |
+| `filosofia.webp` | Philosophy banner (21:9) | `hero-main.jpg` |
+| `haras-1…3.webp` | Estate collage | `j-estate-sunset`, `facility-pathways`, gallery `g04` |
+| `slow-1…3.webp` | "A day at La Alhambra" chapters (16:9) | `j-pergola-rainbow`, `hero-secondary`, gallery `g07` |
+| `noche-1…9.webp` | Nights zoom grid (`noche-1` is the centre, 16:9) | gallery `g16 g14 g07 g13 g28 g51 g26 g18`, `event-white-stallion` |
+| `concurso.webp` | 2025 dressage competition poster | `ig-muzzle.jpg` (1st Concurso poster) |
+| `cela-*.webp` | Equestrian Center hover images (4:5) | `j-golden-petting`, `video-poster-dressage`, `journal-dressage-poster`, `j-stable-kiss`, gallery `g03`, `video-poster-rain` |
+| `visita.webp` | Visit section background | `j-pool-dusk.jpg` |
 
-Compress images to ~300 KB (WebP or JPG, ~2000px on the long side).
-Export videos as H.264 MP4 with `-movflags +faststart`.
+A `slow-N` layer can also hold a `<video>`: it plays at half speed only while its chapter is on screen.
+`dressage-hero.mp4`, `journal-dressage.mp4` and `journal-grooming.mp4` are waiting on smaller
+exports (under 9 MB) to drop into those chapters.

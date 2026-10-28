@@ -4,9 +4,10 @@ export const en = {
   'nav.philosophy': 'Philosophy',
   'nav.estate': 'The Estate',
   'nav.center': 'Equestrian Center',
+  'nav.nights': 'Nights',
   'nav.visit': 'Book a visit',
 
-  'hero.eyebrow': 'Santa Cruz de la Sierra · Bolivia · Since 1993',
+  'hero.eyebrow': 'Urubó · Santa Cruz de la Sierra · Since 1993',
   'hero.pre': 'Haras',
   'hero.sub': 'Arabian and Pura Raza Española horses.<br />Raised with patience, selected with rigor.',
   'hero.scroll': 'Scroll',
@@ -57,11 +58,21 @@ export const en = {
   'estate.s5': 'on-site veterinary facilities',
 
   'slow.eyebrow': 'A day at La Alhambra',
-  'slow.c1': 'Dawn reaches the fields first.',
+  'slow.c1': 'After the rain, the estate wakes in silence.',
   'slow.c2': 'In the arena, every step is worked. None is forced.',
-  'slow.c3': 'As evening falls, they are free again.',
+  'slow.c3': 'And on certain nights, the arena becomes a stage.',
 
-  'cela.eyebrow': 'Chapter V — C.E.L.A.',
+  'nights.eyebrow': 'Chapter V — Nights at La Alhambra',
+  'nights.title': 'When night falls,<br /><em>the arena is a stage.</em>',
+  'nights.body': 'Galas, dinners under canopies and equestrian performances in the spotlight. Our horses, and the whole estate, dress up to welcome those who want to celebrate among them.',
+
+  'contest.eyebrow': '2025 Season',
+  'contest.title': 'Home of the Dressage Competition circuit.',
+  'contest.body': 'From the first competition on March 22 to the fifth on August 2, riders from Santa Cruz competed in our arena with the gates open to the public. That is how we see dressage: as something to be shared.',
+  'contest.d1': 'March 22, 2025',
+  'contest.d2': 'August 2, 2025',
+
+  'cela.eyebrow': 'Chapter VI — C.E.L.A.',
   'cela.title': 'La Alhambra<br /><em>Equestrian Center.</em>',
   'cela.body': 'We opened our gates so more people can live what we live every morning. Instruction, training and care held to the same standard we use to raise our own horses.',
   'cela.s1.t': 'Riding school', 'cela.s1.d': 'For every age. From the first walk to the first show.',
@@ -71,7 +82,7 @@ export const en = {
   'cela.s5.t': 'Indoor and grass arenas', 'cela.s5.d': 'Train under cover through the rainy season, or outdoors on grass.',
   'cela.s6.t': 'Paddocks and fields', 'cela.s6.d': 'Turnout every day. A horse that moves is a horse that thinks better.',
 
-  'visit.eyebrow': 'Chapter VI — Visit us',
+  'visit.eyebrow': 'Chapter VII — Visit us',
   'visit.title': 'Come and<br /><em>meet them.</em>',
   'visit.body': 'Visits are by appointment. Write to us and we will open the gate: to meet our horses, begin your lessons or find a new home for your own.',
   'visit.cta1': 'Message us on Instagram',
