@@ -30,7 +30,12 @@ Any new folder with an `index.html` becomes a page automatically.
 - **Copy:** Spanish is written in the HTML; English sits on the same element in `data-en` (and `data-en-placeholder`, `data-en-alt`).
 - **Shared header, menu, footer and Spirit widget:** `src/partials/*.html`, pulled into every page with `<!-- @include nav -->` etc.
 - **Services and prices:** `src/data/services.js`. The rates page and Spirit both read from it, so a price changes in one place.
+- **Home hero:** `src/hero.js`. The film plays through the letters of ALHAMBRA cut out of a sheet of paper; on scroll the camera flies into the H while the film pulls back. Letters fit any screen (one line when wide, AL / HAM / BRA on phones).
+- **Program cards** (home and Education): `src/partials/programs.html`.
 - **Animations:** `src/main.js` · **Styles:** `src/style.css`
+- **Type:** Cormorant Garamond for headings, Montserrat for text. Spacing between sections is the `--section` token (never under 120px on desktop); corners use `--radius`.
+- **Galleries:** a balanced grid where every row ends flush. Give landscape photos `g-wide` (two columns) and a hero shot `g-feature` (2 × 2); portraits need no class. Keep each gallery's total at a multiple of 4 cells (wide = 2, feature = 4).
+- **Photo focus:** fixed frames crop with `style="--pos: 50% 60%"` on the `<img>` to keep the horse in view.
 - **Photos:** `public/media/` (see its README)
 
 ## Spirit (AI assistant)

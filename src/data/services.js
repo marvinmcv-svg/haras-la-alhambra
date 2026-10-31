@@ -7,6 +7,8 @@ export const categories = [
     id: 'educacion',
     es: 'Educación ecuestre',
     en: 'Riding education',
+    image: '/media/lib/ig-paddock-dark.webp', pos: '50% 62%',
+    intro: { es: 'Del primer contacto con el caballo al primer concurso, con el mismo método con el que formamos a nuestros caballos.', en: 'From the first touch to the first competition, with the same method we use to raise our horses.' },
     items: [
       { es: 'Clase de prueba', en: 'Trial lesson', price: 150, unit: { es: 'por clase', en: 'per lesson' },
         desc: { es: 'Una hora para conocer el centro, al instructor y a su primer caballo.', en: 'One hour to meet the center, the instructor and your first horse.' } },
@@ -28,6 +30,8 @@ export const categories = [
     id: 'caballos',
     es: 'Cuidado y entrenamiento',
     en: 'Care and training',
+    image: '/media/lib/g83.webp', pos: '50% 35%',
+    intro: { es: 'Su caballo, en casa: box, alimentación, salida diaria y un equipo que lo trabaja con paciencia y método.', en: 'Your horse, at home: stabling, feed, daily turnout and a team that works it with patience and method.' },
     items: [
       { es: 'Pensión completa', en: 'Full boarding', price: 3200, unit: { es: 'al mes', en: 'per month' }, featured: true,
         desc: { es: 'Box, alimentación, cama, salida diaria a paddock y control veterinario.', en: 'Stable, feed, bedding, daily turnout and veterinary checks.' } },
@@ -43,6 +47,8 @@ export const categories = [
     id: 'instalaciones',
     es: 'Instalaciones',
     en: 'Facilities',
+    image: '/media/lib/g03.webp', pos: '50% 60%',
+    intro: { es: 'Picadero cubierto para la temporada de lluvias y pista verde para concursos y clínicas.', en: 'An indoor arena for the rainy season and a grass arena for shows and clinics.' },
     items: [
       { es: 'Alquiler de picadero cubierto', en: 'Indoor arena rental', price: 200, unit: { es: 'por hora', en: 'per hour' },
         desc: { es: 'Para entrenar bajo techo durante la temporada de lluvias.', en: 'Train under cover through the rainy season.' } },
@@ -52,8 +58,10 @@ export const categories = [
   },
   {
     id: 'experiencias',
-    es: 'Eventos y experiencias',
-    en: 'Events and experiences',
+    es: 'Eventos y alquileres',
+    en: 'Events and rentals',
+    image: '/media/lib/g16.webp', pos: '50% 60%',
+    intro: { es: 'Visitas, caballos entre sus invitados, espectáculos de alta escuela y el haras completo para su celebración.', en: 'Visits, horses among your guests, haute école shows and the whole estate for your celebration.' },
     items: [
       { es: 'Visita guiada al haras', en: 'Guided estate visit', price: 100, unit: { es: 'por persona', en: 'per person' },
         desc: { es: 'Recorrido por las caballerizas, los potreros y los picaderos. Con cita previa.', en: 'A walk through the stables, fields and arenas. By appointment.' } },

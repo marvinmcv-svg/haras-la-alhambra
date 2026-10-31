@@ -49,24 +49,46 @@
   <main id="top">
 
     <!-- HERO -->
+    <!-- The film plays through the letters of ALHAMBRA cut out of a sheet of paper.
+         Scrolling flies the camera into one letter while the film pulls back, until the film fills the screen. -->
     <section class="hero" aria-label="Inicio">
-      <div class="hero__media media" data-label="hero.mp4">
-        <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="/media/hero.jpg">
-          <source src="/media/hero.mp4" type="video/mp4" />
-        </video>
-        <div class="hero__shade"></div>
-      </div>
-      <div class="hero__content">
-        <p class="eyebrow hero__eyebrow" data-en="Urubó · Santa Cruz de la Sierra · Since 1993">Urubó · Santa Cruz de la Sierra · Desde 1993</p>
-        <h1 class="hero__title" aria-label="Haras La Alhambra">
-          <span class="hero__line hero__line--small">Haras</span>
-          <span class="hero__line hero__word">La Alhambra</span>
-        </h1>
-        <p class="hero__sub" data-en="Purebred Arabian and Pura Raza Española horses,<br />raised with patience and selected with rigor.">Caballos Pura Sangre Árabe y Pura Raza Española,<br />criados con paciencia y seleccionados con rigor.</p>
-      </div>
-      <div class="hero__scroll">
-        <span data-en="Scroll">Deslice</span>
-        <i class="hero__scroll-line"></i>
+      <div class="hero__stage">
+        <div class="hero__film media" data-label="hero.mp4">
+          <video class="hero__video" autoplay muted loop playsinline preload="auto" poster="/media/hero.jpg">
+            <source src="/media/hero.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="hero__veil"></div>
+
+        <svg class="hero__paper" aria-hidden="true">
+          <defs>
+            <mask id="hero-cut" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+              <rect width="100%" height="100%" fill="#fff" />
+              <text class="hero__letters" fill="#000"></text>
+            </mask>
+          </defs>
+          <rect class="hero__sheet" width="100%" height="100%" mask="url(#hero-cut)" />
+        </svg>
+
+        <div class="hero__frame">
+          <h1 class="hero__brand"><span>Haras</span> La Alhambra<span class="sr-only"> — Caballos Pura Sangre Árabe y Pura Raza Española, Santa Cruz, Bolivia</span></h1>
+          <p class="hero__est" data-en="Urubó · Santa Cruz de la Sierra<br />Since 1993">Urubó · Santa Cruz de la Sierra<br />Desde 1993</p>
+          <ul class="hero__breeds">
+            <li data-en="Purebred Arabian">Pura Sangre Árabe</li>
+            <li>Pura Raza Española</li>
+            <li data-en="Hispano-Arabian">Hispano-Árabe</li>
+          </ul>
+          <p class="hero__cue"><span data-en="Scroll to enter">Deslice para entrar</span><i></i></p>
+        </div>
+
+        <div class="hero__copy">
+          <p class="eyebrow" data-en="Arabian and Spanish horses · Since 1993">Caballos árabes y españoles · Desde 1993</p>
+          <p class="hero__title" data-en="Raised with patience.<br /><em>Selected with rigor.</em>">Criados con paciencia.<br /><em>Seleccionados con rigor.</em></p>
+          <div class="hero__actions">
+            <a class="btn btn--gold magnetic" href="/linajes/"><span data-en="Meet the bloodlines">Conocer los linajes</span></a>
+            <a class="btn btn--ghost magnetic" href="#visita"><span data-en="Book a visit">Agendar visita</span></a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -227,15 +249,15 @@
         <div class="stat" data-fade><span class="stat__num">+</span><span class="stat__label" data-en="on-site veterinary facilities">instalaciones veterinarias propias</span></div>
       </div>
       <div class="spaces">
-        <figure class="space media" data-label="casa" data-cursor="view">
+        <figure class="space g-feature media" data-label="casa" data-cursor="view">
           <img src="/media/lib/j-estate-sunset.webp" alt="La casa principal y la piscina al atardecer" loading="lazy" />
           <figcaption><small>01</small><span data-en="The main house">La casa principal</span></figcaption>
         </figure>
-        <figure class="space media" data-label="potreros" data-cursor="view">
+        <figure class="space g-wide media" data-label="potreros" data-cursor="view">
           <img src="/media/lib/video-poster-rain.webp" alt="Yeguas pastando bajo un flamboyán en flor" loading="lazy" />
           <figcaption><small>02</small><span data-en="Fields">Potreros</span></figcaption>
         </figure>
-        <figure class="space media" data-label="picadero" data-cursor="view">
+        <figure class="space g-wide media" data-label="picadero" data-cursor="view">
           <img src="/media/lib/g03.webp" alt="El picadero cubierto iluminado" loading="lazy" />
           <figcaption><small>03</small><span data-en="Indoor arena">Picadero cubierto</span></figcaption>
         </figure>
@@ -247,7 +269,7 @@
           <img src="/media/lib/video-poster-dressage.webp" alt="Jinete trabajando en la pista de doma al aire libre" loading="lazy" />
           <figcaption><small>05</small><span data-en="Dressage arena">Pista de doma</span></figcaption>
         </figure>
-        <figure class="space media" data-label="caminos" data-cursor="view">
+        <figure class="space g-wide media" data-label="caminos" data-cursor="view">
           <img src="/media/lib/facility-pathways.webp" alt="Camino de palmeras entre las galerías del haras" loading="lazy" />
           <figcaption><small>06</small><span data-en="Palm-lined paths">Caminos de palmeras</span></figcaption>
         </figure>
@@ -313,9 +335,10 @@
             <div><span class="contest__num">I</span><span data-en="March 22, 2025">22 de marzo de 2025</span></div>
             <div><span class="contest__num">V</span><span data-en="August 2, 2025">2 de agosto de 2025</span></div>
           </div>
+          <a class="chapter-link" href="/noches/#concursos" data-fade><span data-en="The 2025 circuit">El circuito 2025</span> <i>→</i></a>
         </div>
         <div class="contest__media media reveal-media" data-label="concurso" data-cursor="view">
-          <img src="/media/concurso.webp" alt="Afiche del 1.er Concurso de Adiestramiento en el Centro Ecuestre La Alhambra" loading="lazy" />
+          <img src="/media/lib/video-poster-dressage.webp" alt="Amazona y caballo negro en una prueba de adiestramiento en la pista de doma" loading="lazy" />
         </div>
       </div>
     </section>
@@ -337,32 +360,7 @@
           </div>
         </div>
       </div>
-      <ol class="programs">
-        <li class="program" data-fade>
-          <span class="program__num">01</span>
-          <h3 class="program__title">Pony Club</h3>
-          <p class="program__meta" data-en="Ages 4 to 8">De 4 a 8 años</p>
-          <p data-en="Play, pony care and first notions of balance.">Juego, cuidado del pony y primeras nociones de equilibrio.</p>
-        </li>
-        <li class="program" data-fade>
-          <span class="program__num">02</span>
-          <h3 class="program__title" data-en="Beginner">Iniciación</h3>
-          <p class="program__meta" data-en="From age 9 and adults">Desde 9 años y adultos</p>
-          <p data-en="Position, basic gaits and safety, in small groups.">Postura, aires básicos y seguridad, en grupos pequeños.</p>
-        </li>
-        <li class="program" data-fade>
-          <span class="program__num">03</span>
-          <h3 class="program__title" data-en="Intermediate &amp; advanced">Intermedio y avanzado</h3>
-          <p class="program__meta" data-en="Riders with a base">Jinetes con base</p>
-          <p data-en="Arena work, small jumps and dressage figures.">Trabajo en pista, saltos pequeños y figuras de doma.</p>
-        </li>
-        <li class="program" data-fade>
-          <span class="program__num">04</span>
-          <h3 class="program__title" data-en="Classical dressage">Doma clásica</h3>
-          <p class="program__meta" data-en="Competition">Competencia</p>
-          <p data-en="Technical preparation for the dressage circuit.">Preparación técnica para el circuito de adiestramiento.</p>
-        </li>
-      </ol>
+<!-- @include programs -->
     </section>
 
     <!-- VII. C.E.L.A. -->

@@ -6,6 +6,7 @@ import Lenis from 'lenis';
 import { getLang, setLang, applyLang } from './i18n.js';
 import { initSpirit } from './spirit.js';
 import { initPricing } from './pricing.js';
+import { createHero } from './hero.js';
 
 gsap.registerPlugin(ScrollTrigger, SplitText);
 
@@ -235,22 +236,14 @@ if (galleryItems.length) {
 
 /* ---------- Loader → hero intro (home) or page intro (chapters) ---------- */
 const hasLoader = !!$('.loader');
-const heroSplit = $('.hero__word') ? SplitText.create('.hero__word', { type: 'chars', charsClass: 'char' }) : null;
+const hero = createHero({ reduceMotion });
 
 function intro() {
-  if (heroSplit) {
-    return gsap.timeline({ defaults: { ease: 'expo.out' } })
-      .from('.hero__media', { clipPath: 'inset(18% 30% 18% 30% round 40vw 40vw 0 0)', duration: 2, ease: 'expo.inOut' })
-      .from('.hero__video', { scale: 1.4, duration: 2.4, ease: 'expo.inOut' }, '<')
-      .from(heroSplit.chars, { yPercent: 100, opacity: 0, duration: 1.3, stagger: 0.035 }, '-=1.1')
-      .from('.hero__line--small', { yPercent: 100, opacity: 0, duration: 1 }, '<0.15')
-      .from(['.hero__eyebrow', '.hero__sub', '.hero__scroll'], { y: 18, opacity: 0, duration: 1.2, stagger: 0.08 }, '<0.25')
-      .from('.nav', { opacity: 0, duration: 1.2 }, '<');
-  }
+  if (hero) return hero.intro();
+  if (!$('.page-hero__media')) return null;
   return gsap.timeline({ defaults: { ease: 'expo.out' } })
-    .from('.page-hero__media', { clipPath: 'inset(12% 8% 12% 8% round 24px)', duration: 1.6, ease: 'expo.inOut' })
-    .from('.page-hero__media img', { scale: 1.25, duration: 2, ease: 'expo.out' }, '<')
-    .from('.page-hero__content > *', { y: 30, opacity: 0, duration: 1.2, stagger: 0.08 }, '-=1.1');
+    .from('.page-hero__media', { clipPath: 'inset(14% 10% 14% 10% round 24px)', duration: 1.7, ease: 'expo.inOut' })
+    .from('.page-hero__content > *', { y: 30, opacity: 0, duration: 1.2, stagger: 0.08 }, '-=1.2');
 }
 
 let seen = false;
@@ -268,7 +261,7 @@ if (reduceMotion) {
 } else if (seen || !hasLoader) {
   document.documentElement.classList.add('no-loader');
   done();
-  if (heroSplit || $('.page-hero__media')) intro();
+  intro();
 } else {
   const counter = { v: 0 };
   const arch = $$('.loader__arch path');
@@ -291,22 +284,6 @@ if (reduceMotion) {
 }
 
 if (!reduceMotion) {
-  /* ---------- Hero: the frame softly closes into a Moorish arch ---------- */
-  if (heroSplit) {
-    gsap.timeline({
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: '+=100%', scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true },
-    })
-      .fromTo('.hero__media',
-        { clipPath: 'inset(0% 0% 0% 0% round 0vw 0vw 0vw 0vw)' },
-        { clipPath: () => {
-          const side = window.innerWidth < window.innerHeight ? 8 : 28;
-          return `inset(10% ${side}% 6% ${side}% round 40vw 40vw 0vw 0vw)`;
-        }, ease: 'none' }, 0)
-      .to('.hero__video', { scale: 1.04, ease: 'none' }, 0)
-      .to('.hero__content', { y: -50, opacity: 0, ease: 'none' }, 0)
-      .to('.hero__scroll', { opacity: 0, ease: 'none', duration: 0.3 }, 0);
-  }
-
   /* ---------- Manifesto: words light up as you read ---------- */
   if ($('[data-words]')) {
     const words = SplitText.create('[data-words]', { type: 'words', wordsClass: 'word' });
@@ -339,30 +316,52 @@ if (!reduceMotion) {
       .from(img, { scale: 1.25, duration: 2, ease: 'expo.out' }, '<0.15');
   });
 
+  /* Mosaics and cards: each tile opens from the bottom while its photo settles from a slight zoom. */
   $$('.space, .gallery__item, .card-reveal').forEach((el, i) => {
-    gsap.from(el, {
-      clipPath: 'inset(100% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut', delay: (i % 3) * 0.08,
-      scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+    const img = el.querySelector('img');
+    gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 92%', once: true }, delay: (i % 4) * 0.07 })
+      .from(el, { clipPath: 'inset(100% 0% 0% 0% round 6px)', duration: 1.3, ease: 'expo.inOut', clearProps: 'clipPath' })
+      .from(img, { scale: 1.22, duration: 1.8, ease: 'expo.out', clearProps: 'transform' }, '<0.1');
+  });
+
+  /* Service cards rise in, one after another. */
+  $$('.svc__cards').forEach((list) => {
+    gsap.from(list.children, {
+      y: 60, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.08, clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: list, start: 'top 88%', once: true },
     });
   });
+
+  /* Scroll zoom: full-bleed photos ease back from a close-up as they cross the screen. */
+  $$('[data-zoom], .page-hero__media img').forEach((img) => {
+    gsap.fromTo(img, { scale: 1.16 }, {
+      scale: 1, ease: 'none',
+      scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true },
+    });
+  });
+
+  /* Haute école: a small window in the dark opens to the full screen while the photo pulls back. */
+  if ($('.showpiece')) {
+    gsap.timeline({
+      scrollTrigger: { trigger: '.showpiece', start: 'top top', end: '+=140%', scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true },
+    })
+      .fromTo('.showpiece__frame', {
+        clipPath: () => (window.innerWidth < 760 ? 'inset(24% 10% 30% 10% round 12px)' : 'inset(20% 30% 26% 30% round 12px)'),
+      }, { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'power2.inOut', duration: 1 }, 0)
+      .fromTo('.showpiece__frame img', { scale: 1.55 }, { scale: 1, ease: 'power2.out', duration: 1.1 }, 0)
+      .fromTo('.showpiece__shade', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.55)
+      .fromTo('.showpiece__copy > *', { y: 40, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.08, duration: 0.35 }, 0.7)
+      .to({}, { duration: 0.3 });
+  }
 
   /* ---------- 3D cards fan in ---------- */
   $$('.pillars, .tilt-group').forEach((group) => {
     gsap.from(group.querySelectorAll('.tilt > *:first-child'), {
-      rotationY: -28, rotationX: 10, z: -160, yPercent: 12, opacity: 0, transformOrigin: '50% 100%',
+      rotationY: -10, z: -80, yPercent: 10, opacity: 0, transformOrigin: '50% 100%', clearProps: 'transform',
       duration: 1.6, ease: 'expo.out', stagger: 0.14,
       scrollTrigger: { trigger: group, start: 'top 80%', once: true },
     });
   });
-  if (!finePointer) {
-    // On touch screens the cards lean as they travel through the viewport.
-    $$('.tilt').forEach((card) => {
-      gsap.fromTo(card, { rotationX: 8 }, {
-        rotationX: -8, ease: 'none', transformPerspective: 900,
-        scrollTrigger: { trigger: card, start: 'top bottom', end: 'bottom top', scrub: true },
-      });
-    });
-  }
 
   /* ---------- Counters ---------- */
   $$('[data-count]').forEach((el) => {
@@ -531,14 +530,10 @@ if (services.length) {
     const inner = $('.float-img__inner');
     const xTo = gsap.quickTo(float, 'x', { duration: 0.7, ease: 'power3' });
     const yTo = gsap.quickTo(float, 'y', { duration: 0.7, ease: 'power3' });
-    const rTo = gsap.quickTo(float, 'rotation', { duration: 0.9, ease: 'power3' });
-    let lastX = 0;
     const list = $('.services');
     list.addEventListener('pointermove', (e) => {
       xTo(e.clientX - float.offsetWidth / 2);
       yTo(e.clientY - float.offsetHeight / 2);
-      rTo(gsap.utils.clamp(-10, 10, (e.clientX - lastX) * 0.5));
-      lastX = e.clientX;
     });
     services.forEach((item) => {
       item.addEventListener('pointerenter', () => {
