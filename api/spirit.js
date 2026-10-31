@@ -50,6 +50,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'invalid_messages' });
   }
 
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error('Spirit: set ANTHROPIC_API_KEY in the Vercel project settings');
+    return res.status(503).json({ error: 'unavailable' });
+  }
+
   try {
     client ??= new Anthropic();
     const response = await client.beta.messages.create({

@@ -524,7 +524,9 @@ const services = $$('.service');
 if (services.length) {
   services.forEach((item) => { const img = new Image(); img.src = item.dataset.img; });
 
-  if (finePointer && !reduceMotion) {
+  // Same breakpoint as the CSS that shows the sticky arch.
+  const stickyMode = window.matchMedia('(max-width: 960px), (hover: none)').matches;
+  if (!stickyMode && !reduceMotion) {
     const float = $('.float-img');
     const inner = $('.float-img__inner');
     const xTo = gsap.quickTo(float, 'x', { duration: 0.7, ease: 'power3' });
