@@ -1,9 +1,12 @@
-// Spirit — the haras' assistant. A Vercel function that relays the visitor's chat to Claude.
-// Needs ANTHROPIC_API_KEY in the Vercel project's environment variables.
+// Spirit — the haras' receptionist. A Vercel function that answers the visitor's chat.
+// Primary model: NVIDIA Nemotron through NVIDIA's OpenAI-compatible API (NVIDIA_API_KEY).
+// If that fails and ANTHROPIC_API_KEY is also set, Claude answers instead.
+import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { categories, formatPrice } from '../src/data/services.js';
 
-let client;
+let nvidia;
+let claude;
 
 const rates = categories.map((c) => `${c.es}:\n${c.items
   .map((i) => `- ${i.es}: ${formatPrice(i)} ${i.price == null ? '' : i.unit.es}. ${i.desc.es}`)
@@ -50,39 +53,60 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'invalid_messages' });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    console.error('Spirit: set ANTHROPIC_API_KEY in the Vercel project settings');
+  if (!process.env.NVIDIA_API_KEY && !process.env.ANTHROPIC_API_KEY) {
+    console.error('Spirit: set NVIDIA_API_KEY in the Vercel project settings');
     return res.status(503).json({ error: 'unavailable' });
   }
 
-  try {
-    client ??= new Anthropic();
-    const response = await client.beta.messages.create({
-      model: 'claude-opus-5-5',
-      max_tokens: 1024,
-      output_config: { effort: 'low' },
-      betas: ['server-side-fallback-2026-07-01'],
-      fallbacks: 'default',
-      system: [{ type: 'text', text: SYSTEM, cache_control: { type: 'ephemeral', ttl: '1h' } }],
-      messages,
-    });
-
-    if (response.stop_reason === 'refusal') {
-      return res.status(200).json({ reply: null, reason: 'refusal' });
+  if (process.env.NVIDIA_API_KEY) {
+    try {
+      const reply = await askNvidia(messages);
+      if (reply) return res.status(200).json({ reply });
+    } catch (error) {
+      console.error(`Spirit: NVIDIA error ${error.status ?? ''}`, error.message);
+      if (!process.env.ANTHROPIC_API_KEY) {
+        return res.status(error.status === 429 ? 429 : 502).json({ error: error.status === 429 ? 'rate_limited' : 'upstream' });
+      }
     }
-    const reply = response.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n').trim();
-    return res.status(200).json({ reply: reply || null });
-  } catch (error) {
-    if (error instanceof Anthropic.RateLimitError) return res.status(429).json({ error: 'rate_limited' });
-    if (error instanceof Anthropic.AuthenticationError) {
-      console.error('Spirit: ANTHROPIC_API_KEY is missing or invalid');
-      return res.status(503).json({ error: 'unavailable' });
-    }
-    if (error instanceof Anthropic.APIError) {
-      console.error(`Spirit: API error ${error.status}`, error.message);
-      return res.status(502).json({ error: 'upstream' });
-    }
-    console.error('Spirit:', error);
-    return res.status(500).json({ error: 'internal' });
+    if (!process.env.ANTHROPIC_API_KEY) return res.status(200).json({ reply: null });
   }
+
+  try {
+    const result = await askClaude(messages);
+    return res.status(200).json(result);
+  } catch (error) {
+    console.error(`Spirit: Claude error ${error.status ?? ''}`, error.message);
+    return res.status(error.status === 429 ? 429 : 502).json({ error: error.status === 429 ? 'rate_limited' : 'upstream' });
+  }
+}
+
+async function askNvidia(messages) {
+  nvidia ??= new OpenAI({ baseURL: 'https://integrate.api.nvidia.com/v1', apiKey: process.env.NVIDIA_API_KEY, timeout: 45_000, maxRetries: 1 });
+  const completion = await nvidia.chat.completions.create({
+    model: 'nvidia/nemotron-3-ultra-550b-a55b',
+    messages: [{ role: 'system', content: SYSTEM }, ...messages],
+    temperature: 0.6,
+    top_p: 0.95,
+    max_tokens: 1024,
+    // A receptionist should answer quickly: no visible reasoning step.
+    chat_template_kwargs: { enable_thinking: false },
+  });
+  const text = completion.choices?.[0]?.message?.content ?? '';
+  return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim() || null;
+}
+
+async function askClaude(messages) {
+  claude ??= new Anthropic();
+  const response = await claude.beta.messages.create({
+    model: 'claude-opus-5-5',
+    max_tokens: 1024,
+    output_config: { effort: 'low' },
+    betas: ['server-side-fallback-2026-07-01'],
+    fallbacks: 'default',
+    system: [{ type: 'text', text: SYSTEM, cache_control: { type: 'ephemeral', ttl: '1h' } }],
+    messages,
+  });
+  if (response.stop_reason === 'refusal') return { reply: null, reason: 'refusal' };
+  const reply = response.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n').trim();
+  return { reply: reply || null };
 }

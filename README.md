@@ -38,15 +38,15 @@ Any new folder with an `index.html` becomes a page automatically.
 - **Photo focus:** fixed frames crop with `style="--pos: 50% 60%"` on the `<img>` to keep the horse in view.
 - **Photos:** `public/media/` (see its README)
 
-## Spirit (AI assistant)
+## Spirit (AI receptionist)
 
-`api/spirit.js` is a Vercel function that sends the visitor's chat to Claude with the haras' information and rates as context. It needs an Anthropic API key:
+`api/spirit.js` is a Vercel function that answers visitors with the haras' information and rates as context. Its logo is the animated horse in `src/partials/spirit.html` (styles under "Spirit's logo" in `src/style.css`).
 
-1. Create a key at https://platform.claude.com.
-2. In Vercel → Project → Settings → Environment Variables, add `ANTHROPIC_API_KEY`.
-3. Redeploy.
+- **Model:** NVIDIA Nemotron (`nvidia/nemotron-3-ultra-550b-a55b`) through NVIDIA's OpenAI-compatible API, with thinking off so replies come back in a couple of seconds.
+- **Key:** `NVIDIA_API_KEY` in Vercel → Project → Settings → Environment Variables (never in the code).
+- **Optional backup:** if `ANTHROPIC_API_KEY` is also set, Claude answers whenever NVIDIA fails.
 
-Without the key (or in `npm run dev`), Spirit still answers common questions about lessons, boarding, events and visits from `src/data/services.js`.
+Without any key (or in `npm run dev`), Spirit still answers common questions about lessons, boarding, events and visits from `src/data/services.js`.
 
 ## Reusable effect
 

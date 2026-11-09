@@ -96,6 +96,7 @@ export function initSpirit(lang) {
     bubble(escape(q), 'user');
     history.push({ role: 'user', content: q });
     save();
+    root.classList.add('is-thinking');
     const typing = bubble(`<span class="spirit__dots" aria-label="${t.thinking}"><i></i><i></i><i></i></span>`, 'bot');
     let reply = null;
     let html = null;
@@ -110,6 +111,7 @@ export function initSpirit(lang) {
       else if (data?.reason === 'refusal') html = t.refusal;
     } catch {}
     if (!reply && !html) html = localAnswer(q, lang) || t.error;
+    root.classList.remove('is-thinking');
     typing.innerHTML = reply ? format(reply) : html;
     history.push({ role: 'assistant', content: reply || typing.textContent });
     save();
