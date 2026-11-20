@@ -13,7 +13,7 @@ for (const dir of readdirSync(root, { withFileTypes: true })) {
   }
 }
 
-// <!-- @include nav --> pulls in src/partials/nav.html, so the header, footer and Lazero live in one place.
+// <!-- @include nav --> pulls in src/partials/nav.html, so the header, footer and Lázaro live in one place.
 const partials = {
   name: 'partials',
   transformIndexHtml: {

@@ -1,5 +1,5 @@
 // Services and reference rates in Bolivianos (Bs). Edit prices here: the Services page
-// and Lazero's knowledge both read from this file.
+// and Lázaro's knowledge both read from this file.
 // `price: null` means "a cotizar" (quoted per request).
 
 export const categories = [

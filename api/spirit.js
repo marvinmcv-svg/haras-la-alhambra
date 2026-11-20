@@ -1,4 +1,4 @@
-// Lazero — the haras' receptionist. A Vercel function that answers the visitor's chat.
+// Lázaro — the haras' receptionist. A Vercel function that answers the visitor's chat.
 // Primary model: NVIDIA Nemotron through NVIDIA's OpenAI-compatible API (NVIDIA_API_KEY).
 // If that fails and ANTHROPIC_API_KEY is also set, Claude answers instead.
 import OpenAI from 'openai';
@@ -13,7 +13,7 @@ const rates = categories.map((c) => `${c.es}:\n${c.items
   .join('\n')}`).join('\n\n');
 
 // Kept byte-for-byte stable so it can be cached across visitors.
-const SYSTEM = `Eres Lazero, el asistente virtual de Haras La Alhambra, en su sitio web.
+const SYSTEM = `Eres Lázaro, el asistente virtual de Haras La Alhambra, en su sitio web.
 
 Regla de trato, sin excepciones: en español trata SIEMPRE al visitante de usted, aunque el visitante te tutee o escriba de manera informal. Usa "usted", "le", "su", "puede", "quiere", "escríbanos", "¿En qué puedo ayudarle?". Nunca uses tú, te, ti, tu, tus, contigo ni verbos en segunda persona informal (puedes, quieres, escríbenos, ayudarte). Antes de responder, revisa que ninguna frase tutee al visitante.
 
@@ -56,7 +56,7 @@ export default async function handler(req, res) {
   }
 
   if (!process.env.NVIDIA_API_KEY && !process.env.ANTHROPIC_API_KEY) {
-    console.error('Lazero: set NVIDIA_API_KEY in the Vercel project settings');
+    console.error('Lázaro: set NVIDIA_API_KEY in the Vercel project settings');
     return res.status(503).json({ error: 'unavailable' });
   }
 
@@ -65,7 +65,7 @@ export default async function handler(req, res) {
       const reply = await askNvidia(messages);
       if (reply) return res.status(200).json({ reply });
     } catch (error) {
-      console.error(`Lazero: NVIDIA error ${error.status ?? ''}`, error.message);
+      console.error(`Lázaro: NVIDIA error ${error.status ?? ''}`, error.message);
       if (!process.env.ANTHROPIC_API_KEY) {
         return res.status(error.status === 429 ? 429 : 502).json({ error: error.status === 429 ? 'rate_limited' : 'upstream' });
       }
@@ -77,7 +77,7 @@ export default async function handler(req, res) {
     const result = await askClaude(messages);
     return res.status(200).json(result);
   } catch (error) {
-    console.error(`Lazero: Claude error ${error.status ?? ''}`, error.message);
+    console.error(`Lázaro: Claude error ${error.status ?? ''}`, error.message);
     return res.status(error.status === 429 ? 429 : 502).json({ error: error.status === 429 ? 'rate_limited' : 'upstream' });
   }
 }
