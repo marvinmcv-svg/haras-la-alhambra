@@ -1,4 +1,4 @@
-// Spirit: the chat widget. Talks to /api/spirit; if that is unreachable (local dev, no API key),
+// Lazero: the chat widget. Talks to /api/spirit; if that is unreachable (local dev, no API key),
 // it answers the most common questions from the rates file so the visitor is never left hanging.
 import { categories, formatPrice } from './data/services.js';
 
@@ -9,12 +9,12 @@ const copy = {
   es: {
     error: 'Ahora mismo no puedo responder. Escríbanos por <a href="' + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a> y el equipo le atenderá.',
     refusal: 'Eso no lo puedo responder, pero el equipo sí: escríbanos por <a href="' + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a>.',
-    thinking: 'Spirit está escribiendo',
+    thinking: 'Lazero está escribiendo',
   },
   en: {
     error: "I can't answer right now. Message us on <a href=\"" + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a> and the team will help you.',
     refusal: "I can't answer that one, but the team can: message us on <a href=\"" + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a>.',
-    thinking: 'Spirit is typing',
+    thinking: 'Lazero is typing',
   },
 };
 

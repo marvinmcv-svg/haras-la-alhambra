@@ -1,4 +1,4 @@
-// Spirit — the haras' receptionist. A Vercel function that answers the visitor's chat.
+// Lazero — the haras' receptionist. A Vercel function that answers the visitor's chat.
 // Primary model: NVIDIA Nemotron through NVIDIA's OpenAI-compatible API (NVIDIA_API_KEY).
 // If that fails and ANTHROPIC_API_KEY is also set, Claude answers instead.
 import OpenAI from 'openai';
@@ -13,7 +13,7 @@ const rates = categories.map((c) => `${c.es}:\n${c.items
   .join('\n')}`).join('\n\n');
 
 // Kept byte-for-byte stable so it can be cached across visitors.
-const SYSTEM = `Eres Spirit, el asistente virtual de Haras La Alhambra, en su sitio web. Tu nombre viene del espíritu del caballo.
+const SYSTEM = `Eres Lazero, el asistente virtual de Haras La Alhambra, en su sitio web.
 
 Sobre el haras:
 - Haras La Alhambra cría caballos Pura Sangre Árabe y Pura Raza Española (P.R.E.) desde 1993, además de Hispano-Árabes de deporte. Trabaja con líneas árabes egipcias, polacas, españolas y norteamericanas.
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
   }
 
   if (!process.env.NVIDIA_API_KEY && !process.env.ANTHROPIC_API_KEY) {
-    console.error('Spirit: set NVIDIA_API_KEY in the Vercel project settings');
+    console.error('Lazero: set NVIDIA_API_KEY in the Vercel project settings');
     return res.status(503).json({ error: 'unavailable' });
   }
 
@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       const reply = await askNvidia(messages);
       if (reply) return res.status(200).json({ reply });
     } catch (error) {
-      console.error(`Spirit: NVIDIA error ${error.status ?? ''}`, error.message);
+      console.error(`Lazero: NVIDIA error ${error.status ?? ''}`, error.message);
       if (!process.env.ANTHROPIC_API_KEY) {
         return res.status(error.status === 429 ? 429 : 502).json({ error: error.status === 429 ? 'rate_limited' : 'upstream' });
       }
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
     const result = await askClaude(messages);
     return res.status(200).json(result);
   } catch (error) {
-    console.error(`Spirit: Claude error ${error.status ?? ''}`, error.message);
+    console.error(`Lazero: Claude error ${error.status ?? ''}`, error.message);
     return res.status(error.status === 429 ? 429 : 502).json({ error: error.status === 429 ? 'rate_limited' : 'upstream' });
   }
 }

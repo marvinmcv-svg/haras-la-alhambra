@@ -670,7 +670,7 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 .lightbox__close { position: absolute; top: 18px; right: 18px; }
 @media (max-width: 600px) { .lightbox { grid-template-columns: 1fr; } .lightbox__nav { position: absolute; bottom: 20px; } .lightbox__nav--prev { left: 30%; } .lightbox__nav--next { right: 30%; } }
 
-/* ---------- Spirit ---------- */
+/* ---------- Lazero ---------- */
 .spirit { position: fixed; right: clamp(14px, 2vw, 28px); bottom: clamp(14px, 2vw, 28px); z-index: 960; display: flex; flex-direction: column-reverse; align-items: flex-end; gap: 12px; }
 .spirit__toggle {
   display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 20px 0 6px; border-radius: 999px;
@@ -679,8 +679,8 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 }
 .spirit__toggle:hover { transform: translateY(-2px); background: var(--gold-2); }
 
-/* Spirit's logo: an animated horse head. It breathes, its mane moves, an ear twitches and it blinks;
-   while Spirit is writing a reply, it nods. */
+/* Lazero's logo: an animated horse head. It breathes, its mane moves, an ear twitches and it blinks;
+   while Lazero is writing a reply, it nods. */
 .spirit__avatar { --horse: var(--gold-2); --avatar-bg: var(--ink); position: relative; flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: var(--avatar-bg); color: var(--horse); }
 .spirit__avatar--gold { --horse: var(--ink); --avatar-bg: var(--gold); width: 46px; height: 46px; }
 .horse { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform: translate(4%, 9%) scale(0.92); }
