@@ -206,9 +206,26 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 .nav__name { font-family: var(--serif); font-size: 20px; letter-spacing: 0.04em; }
 .nav__links { display: flex; gap: clamp(18px, 2vw, 32px); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
 .nav__actions { display: flex; align-items: center; gap: 16px; }
-.lang { font-size: 12px; letter-spacing: 0.16em; display: flex; gap: 6px; color: var(--muted); }
-.lang i { font-style: normal; opacity: 0.4; }
-.lang .is-active { color: var(--sand); }
+/* Language menu */
+.lang { position: relative; }
+.lang__current { display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); font-size: 12px; letter-spacing: 0.12em; color: var(--sand); transition: border-color 0.4s var(--ease); }
+.lang__current:hover, .lang.is-open .lang__current { border-color: var(--gold); }
+.lang__current svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.2; opacity: 0.8; }
+.lang__current b { font-weight: 600; min-width: 1.4em; text-align: center; }
+.lang__menu {
+  position: absolute; top: calc(100% + 10px); right: 0; min-width: 170px; list-style: none; padding: 8px;
+  background: rgba(23, 19, 15, 0.97); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 30px 60px -24px rgba(0,0,0,0.8);
+  opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity 0.35s var(--ease), transform 0.35s var(--ease), visibility 0.35s;
+}
+.lang.is-open .lang__menu { opacity: 1; visibility: visible; transform: none; }
+.lang__menu button { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 8px; font-size: 15px; color: var(--sand-2); text-align: start; }
+.lang__menu button:hover { background: var(--ink-3); color: var(--sand); }
+.lang__menu button.is-active { color: var(--gold-2); }
+.lang__menu button.is-active::after { content: '•'; color: var(--gold); }
+.menu__langs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 36px; }
+.menu__langs button { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); font-size: 14px; color: var(--sand-2); }
+.menu__langs button.is-active { border-color: var(--gold); color: var(--gold-2); }
 .nav .btn { height: 42px; padding: 0 20px; font-size: 11px; }
 
 .burger { display: none; width: 44px; height: 44px; position: relative; border: 1px solid var(--line); border-radius: 50%; }
@@ -297,8 +314,7 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 /* Nav over the light paper */
 .nav.is-light { color: var(--ink); }
 .nav.is-light .nav__mono { border-color: var(--terra); color: var(--terra); }
-.nav.is-light .lang { color: rgba(15,13,11,0.5); }
-.nav.is-light .lang .is-active { color: var(--ink); }
+.nav.is-light .lang__current { color: var(--ink); border-color: rgba(15,13,11,0.25); }
 .nav.is-light .btn--ghost { border-color: rgba(15,13,11,0.25); }
 .nav.is-light .burger { border-color: rgba(15,13,11,0.25); }
 .nav.is-light .burger i { background: var(--ink); }
@@ -937,3 +953,14 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 }
 .breed-section--tint { background: var(--ink-2); }
 .page-hero + .breed-section { margin-top: var(--section); }
+
+/* ---------- Arabic and Chinese ----------
+   Arabic text runs right to left inside the same layout; neither script takes letter-spacing,
+   italics or tight line-height, which break Arabic joining and clip characters. */
+html[data-lang="ar"] :is(p, h1, h2, h3, h4, li, blockquote, figcaption, summary, address, small, .eyebrow, .chapter-link, .btn span, .spirit__msg) { direction: rtl; unicode-bidi: plaintext; }
+html[data-lang="ar"], html[data-lang="zh"] { --serif: 'Cormorant Garamond', 'Noto Naskh Arabic', 'Geeza Pro', 'Songti SC', 'Noto Serif SC', 'Noto Serif CJK SC', serif; --sans: 'Manrope Variable', 'Noto Sans Arabic', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Noto Sans CJK SC', system-ui, sans-serif; }
+html[data-lang="ar"] *, html[data-lang="zh"] * { letter-spacing: 0 !important; }
+html[data-lang="ar"] em, html[data-lang="zh"] em, html[data-lang="ar"] .quote, html[data-lang="zh"] .quote { font-style: normal; }
+html[data-lang="ar"] :is(.display, .h2, .mega, .quote, .page-hero__title, .manifesto__text, .breed__name, .svc__title),
+html[data-lang="zh"] :is(.display, .h2, .mega, .quote, .page-hero__title, .manifesto__text, .breed__name, .svc__title) { line-height: 1.35; }
+html[data-lang="zh"] .manifesto__text .word { display: inline; }

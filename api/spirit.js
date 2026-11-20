@@ -30,13 +30,17 @@ Tarifas de referencia en bolivianos (Bs). Pueden cambiar; la confirmación final
 ${rates}
 
 Cómo respondes:
-- Responde en el idioma del visitante (español o inglés). En español, siempre de usted, como indica la regla de trato.
+- Responde siempre en el idioma en que escribe el visitante. El sitio está en español, inglés, portugués, árabe y chino mandarín: responde con fluidez y naturalidad en cualquiera de ellos (en chino, con caracteres simplificados; en árabe, en árabe estándar moderno). Si el mensaje es muy corto o no deja claro el idioma (por ejemplo "ok" o un emoji), responde en el idioma de la página que el visitante está viendo, indicado al final. Si escribe en otro idioma, respóndele en ese idioma.
+- Trato cortés en todos los idiomas: en español, siempre de usted, como indica la regla de trato; en portugués, trato cortés y respetuoso; en chino, usa 您; en árabe, un registro formal y respetuoso; en inglés, cálido y profesional.
+- Traduce los nombres de los servicios al idioma del visitante cuando ayude a entenderlos, pero escribe siempre los nombres propios tal cual, en letras latinas, también en árabe y en chino: Haras La Alhambra, C.E.L.A., Lázaro, Urubó, Porongo, Instagram (@haraslaalhambra.bo). Escribe los precios siempre con el símbolo Bs y la cifra, por ejemplo "Bs 150", en todos los idiomas; no traduzcas ni transliteres el nombre de la moneda.
 - Sé cálido, breve y concreto: dos a cinco frases, sin listas largas salvo que pidan precios.
 - Usa solo la información de arriba. Si no la tienes (horarios exactos, disponibilidad de caballos en venta, nombres del personal, teléfonos), dilo con naturalidad e invita a escribir por Instagram para coordinar.
 - Cuando el visitante muestre interés concreto (clases, pensión, un evento, una visita), sugiere agendar una cita por Instagram.
 - No inventes precios, fechas ni promociones. No des consejos veterinarios; recomienda consultar con un veterinario.`;
 
 const MAX_TURNS = 12;
+const PAGE_LANGS = { es: 'español', en: 'inglés', pt: 'portugués', ar: 'árabe', zh: 'chino mandarín' };
+const pageNote = (lang) => `Idioma de la página que el visitante está viendo: ${PAGE_LANGS[lang] || PAGE_LANGS.es}.`;
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -62,7 +66,7 @@ export default async function handler(req, res) {
 
   if (process.env.NVIDIA_API_KEY) {
     try {
-      const reply = await askNvidia(messages);
+      const reply = await askNvidia(messages, req.body?.lang);
       if (reply) return res.status(200).json({ reply });
     } catch (error) {
       console.error(`Lázaro: NVIDIA error ${error.status ?? ''}`, error.message);
@@ -74,7 +78,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const result = await askClaude(messages);
+    const result = await askClaude(messages, req.body?.lang);
     return res.status(200).json(result);
   } catch (error) {
     console.error(`Lázaro: Claude error ${error.status ?? ''}`, error.message);
@@ -82,11 +86,11 @@ export default async function handler(req, res) {
   }
 }
 
-async function askNvidia(messages) {
+async function askNvidia(messages, lang) {
   nvidia ??= new OpenAI({ baseURL: 'https://integrate.api.nvidia.com/v1', apiKey: process.env.NVIDIA_API_KEY, timeout: 45_000, maxRetries: 1 });
   const completion = await nvidia.chat.completions.create({
     model: 'nvidia/nemotron-3-ultra-550b-a55b',
-    messages: [{ role: 'system', content: SYSTEM }, ...messages],
+    messages: [{ role: 'system', content: `${SYSTEM}\n\n${pageNote(lang)}` }, ...messages],
     temperature: 0.6,
     top_p: 0.95,
     max_tokens: 1024,
@@ -97,7 +101,7 @@ async function askNvidia(messages) {
   return text.replace(/<think>[\s\S]*?<\/think>/g, '').trim() || null;
 }
 
-async function askClaude(messages) {
+async function askClaude(messages, lang) {
   claude ??= new Anthropic();
   const response = await claude.beta.messages.create({
     model: 'claude-opus-5-5',
@@ -105,7 +109,10 @@ async function askClaude(messages) {
     output_config: { effort: 'low' },
     betas: ['server-side-fallback-2026-07-01'],
     fallbacks: 'default',
-    system: [{ type: 'text', text: SYSTEM, cache_control: { type: 'ephemeral', ttl: '1h' } }],
+    system: [
+      { type: 'text', text: SYSTEM, cache_control: { type: 'ephemeral', ttl: '1h' } },
+      { type: 'text', text: pageNote(lang) },
+    ],
     messages,
   });
   if (response.stop_reason === 'refusal') return { reply: null, reason: 'refusal' };

@@ -1,47 +1,35 @@
 // Lázaro: the chat widget. Talks to /api/spirit; if that is unreachable (local dev, no API key),
 // it answers the most common questions from the rates file so the visitor is never left hanging.
-import { categories, formatPrice } from './data/services.js';
+import { categories } from './data/services.js';
+import { UI } from './ui-strings.js';
+import { pick, langInfo } from './i18n.js';
 
 const STORE = 'hla-spirit';
-const INSTAGRAM = 'https://www.instagram.com/haraslaalhambra.bo/';
 
-const copy = {
-  es: {
-    error: 'Ahora mismo no puedo responder. Escríbanos por <a href="' + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a> y el equipo le atenderá.',
-    refusal: 'Eso no lo puedo responder, pero el equipo sí: escríbanos por <a href="' + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a>.',
-    thinking: 'Lázaro está escribiendo',
-  },
-  en: {
-    error: "I can't answer right now. Message us on <a href=\"" + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a> and the team will help you.',
-    refusal: "I can't answer that one, but the team can: message us on <a href=\"" + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a>.',
-    thinking: 'Lázaro is typing',
-  },
+const price = (item) => {
+  if (item.price == null) return pick(UI.onRequest);
+  return `${item.from ? pick(UI.from) + ' ' : ''}Bs ${item.price.toLocaleString(langInfo().number)}`;
 };
 
-// Offline answers, matched by keyword.
-function localAnswer(q, lang) {
+// Offline answers, matched by keyword in any of the five languages.
+function localAnswer(q) {
   const t = q.toLowerCase();
-  const pick = (id) => categories.find((c) => c.id === id);
-  const list = (id) => pick(id).items.map((i) => `${i[lang]}: ${formatPrice(i, lang)}${i.price == null ? '' : ' ' + i.unit[lang]}`).join('<br />');
-  const es = lang === 'es';
-  if (/clase|lesson|escuela|school|pony|aprender|learn|curso|camp/.test(t)) {
-    return (es ? 'Estas son las tarifas de referencia de la escuela:<br />' : 'These are the school\'s reference rates:<br />') + list('educacion')
-      + (es ? '<br />Más detalles en <a href="/educacion/">Educación</a>.' : '<br />More on the <a href="/educacion/">Education</a> page.');
+  const list = (id) => categories.find((c) => c.id === id).items
+    .map((i) => `${pick(i)}: ${price(i)}${i.price == null ? '' : ' ' + pick(i.unit)}`).join('<br />');
+  if (/clase|lesson|escuela|school|pony|aprender|learn|curso|camp|aula|escola|aprender|课|学|درس|دروس|تعلم|مدرسة/.test(t)) {
+    return `${pick(UI.chatSchool)}<br />${list('educacion')}<br />${pick(UI.chatSchoolMore)}`;
   }
-  if (/pensi|board|box|establo|stable|entren|train|potro/.test(t)) {
-    return (es ? 'Para su caballo ofrecemos:<br />' : 'For your horse we offer:<br />') + list('caballos');
+  if (/pensi|board|box|establo|stable|entren|train|potro|hospedagem|treino|寄养|马厩|训练|إقامة|إسطبل|تدريب/.test(t)) {
+    return `${pick(UI.chatHorse)}<br />${list('caballos')}`;
   }
-  if (/event|gala|cena|dinner|boda|wedding|fiesta|party|show|espect/.test(t)) {
-    return (es ? 'Organizamos galas, cenas bajo carpas, espectáculos y paseos de caballos entre los invitados:<br />' : 'We host galas, dinners under canopies, shows and horses walking among guests:<br />')
-      + list('experiencias') + (es ? '<br />Vea más en <a href="/noches/">Noches</a>.' : '<br />See more on <a href="/noches/">Nights</a>.');
+  if (/event|gala|cena|dinner|boda|wedding|fiesta|party|show|espect|casamento|festa|jantar|活动|婚礼|晚宴|حفل|زفاف|عشاء|مناسبة/.test(t)) {
+    return `${pick(UI.chatEvents)}<br />${list('experiencias')}<br />${pick(UI.chatEventsMore)}`;
   }
-  if (/visit|cita|appoint|dónde|donde|where|llegar|direc|ubica|locat/.test(t)) {
-    return es
-      ? 'Estamos en la Carretera a Porongo, Cruce Los Batos (Km 5), Urubó. Las visitas son con cita previa: escríbanos por <a href="' + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a>.'
-      : 'We are on the road to Porongo, Cruce Los Batos (Km 5), Urubó. Visits are by appointment: message us on <a href="' + INSTAGRAM + '" target="_blank" rel="noopener">Instagram</a>.';
+  if (/visit|cita|appoint|dónde|donde|where|llegar|direc|ubica|locat|onde|chegar|endereço|参观|地址|在哪|زيارة|عنوان|أين|موقع/.test(t)) {
+    return pick(UI.chatVisit);
   }
-  if (/precio|tarifa|cuesta|cost|price|rate/.test(t)) {
-    return es ? 'Todas las tarifas están en <a href="/servicios/">Servicios y tarifas</a>. ¿Le interesa algo en particular?' : 'All rates are on <a href="/servicios/">Services &amp; rates</a>. Anything in particular?';
+  if (/precio|tarifa|cuesta|cost|price|rate|preço|valor|quanto|价格|多少钱|费用|سعر|أسعار|تكلفة/.test(t)) {
+    return pick(UI.chatRates);
   }
   return null;
 }
@@ -56,7 +44,6 @@ const format = (s) => escape(s)
 export function initSpirit(lang) {
   const root = document.querySelector('.spirit');
   if (!root) return;
-  const t = copy[lang] || copy.es;
   const toggle = root.querySelector('.spirit__toggle');
   const panel = root.querySelector('.spirit__panel');
   const log = root.querySelector('.spirit__log');
@@ -97,20 +84,20 @@ export function initSpirit(lang) {
     history.push({ role: 'user', content: q });
     save();
     root.classList.add('is-thinking');
-    const typing = bubble(`<span class="spirit__dots" aria-label="${t.thinking}"><i></i><i></i><i></i></span>`, 'bot');
+    const typing = bubble(`<span class="spirit__dots" aria-label="${pick(UI.chatTyping)}"><i></i><i></i><i></i></span>`, 'bot');
     let reply = null;
     let html = null;
     try {
       const res = await fetch('/api/spirit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: history, lang }),
       });
       const data = res.ok ? await res.json() : null;
       if (data?.reply) reply = data.reply;
-      else if (data?.reason === 'refusal') html = t.refusal;
+      else if (data?.reason === 'refusal') html = pick(UI.chatRefusal);
     } catch {}
-    if (!reply && !html) html = localAnswer(q, lang) || t.error;
+    if (!reply && !html) html = localAnswer(q) || pick(UI.chatError);
     root.classList.remove('is-thinking');
     typing.innerHTML = reply ? format(reply) : html;
     history.push({ role: 'assistant', content: reply || typing.textContent });

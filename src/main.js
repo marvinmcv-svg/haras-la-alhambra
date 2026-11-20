@@ -3,7 +3,8 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import Lenis from 'lenis';
-import { getLang, setLang, applyLang } from './i18n.js';
+import { getLang, setLang, applyLang, pick } from './i18n.js';
+import { UI } from './ui-strings.js';
 import { initSpirit } from './spirit.js';
 import { initPricing } from './pricing.js';
 import { createHero } from './hero.js';
@@ -17,13 +18,24 @@ const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 
 /* ---------- Language ---------- */
 const lang = getLang();
-initPricing(lang);
 applyLang(lang);
-$('.lang')?.addEventListener('click', () => {
-  setLang(lang === 'es' ? 'en' : 'es');
+initPricing(lang);
+$$('[data-set-lang]').forEach((btn) => btn.addEventListener('click', () => {
+  if (btn.dataset.setLang === lang) return;
+  setLang(btn.dataset.setLang);
   try { sessionStorage.setItem('hla-seen', '1'); } catch {}
   location.reload();
-});
+}));
+// Language menu in the nav.
+const langBox = $('.lang');
+const langToggle = $('.lang__current');
+const setLangOpen = (open) => {
+  langBox?.classList.toggle('is-open', open);
+  langToggle?.setAttribute('aria-expanded', String(open));
+};
+langToggle?.addEventListener('click', (e) => { e.stopPropagation(); setLangOpen(!langBox.classList.contains('is-open')); });
+document.addEventListener('click', (e) => { if (!e.target.closest('.lang')) setLangOpen(false); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setLangOpen(false); });
 $$('.year').forEach((el) => { el.textContent = new Date().getFullYear(); });
 
 /* ---------- Current page in the nav ---------- */
@@ -145,7 +157,7 @@ if (finePointer && !reduceMotion) {
     gsap.set(['.cursor__dot', '.cursor__ring'], { x: e.clientX, y: e.clientY });
     gsap.to(cursor, { autoAlpha: 1, duration: 0.4 });
   }, { once: true });
-  const viewWord = lang === 'en' ? 'View' : 'Ver';
+  const viewWord = pick(UI.view);
   document.addEventListener('pointerover', (e) => {
     const t = e.target;
     const view = t.closest('[data-cursor="view"]');
@@ -286,8 +298,9 @@ if (reduceMotion) {
 if (!reduceMotion) {
   /* ---------- Manifesto: words light up as you read ---------- */
   if ($('[data-words]')) {
-    const words = SplitText.create('[data-words]', { type: 'words', wordsClass: 'word' });
-    gsap.fromTo(words.words, { opacity: 0.18 }, {
+    // Chinese has no spaces, so it lights up character by character.
+    const words = SplitText.create('[data-words]', lang === 'zh' ? { type: 'chars', charsClass: 'word' } : { type: 'words', wordsClass: 'word' });
+    gsap.fromTo((lang === 'zh' ? words.chars : words.words), { opacity: 0.18 }, {
       opacity: 1, ease: 'none', stagger: 0.1,
       scrollTrigger: { trigger: '[data-words]', start: 'top 75%', end: 'bottom 60%', scrub: true },
     });

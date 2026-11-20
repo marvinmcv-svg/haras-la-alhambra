@@ -2,7 +2,7 @@
 
 Website for Haras La Alhambra: Arabian and Pura Raza Española breeders in Santa Cruz de la Sierra, Bolivia, since 1993.
 
-Static multi-page site built with Vite, GSAP (ScrollTrigger, SplitText) and Lenis, plus one Vercel function for Lázaro, the site's assistant. Spanish by default, English via the ES/EN toggle.
+Static multi-page site built with Vite, GSAP (ScrollTrigger, SplitText) and Lenis, plus one Vercel function for Lázaro, the site's assistant. Spanish by default, with a language menu for English, Portuguese, Arabic and Chinese.
 
 ```bash
 npm install
@@ -27,7 +27,14 @@ Any new folder with an `index.html` becomes a page automatically.
 
 ## Where things live
 
-- **Copy:** Spanish is written in the HTML; English sits on the same element in `data-en` (and `data-en-placeholder`, `data-en-alt`).
+- **Copy:** Spanish is written in the HTML; English sits on the same element in `data-en` (and `data-en-placeholder`, `data-en-alt`). Text that lives in JavaScript is in `src/ui-strings.js`.
+- **Portuguese, Arabic and Chinese:** `src/locales/{pt,ar,zh}.json`, keyed by the English text. After changing any English copy, run the translator to fill in what's new (existing translations are kept; you can also edit the JSON by hand):
+
+  ```bash
+  NVIDIA_API_KEY=your-key npm run translate
+  ```
+
+  Arabic is shown right to left; both Arabic and Chinese use system fonts that include their scripts.
 - **Shared header, menu, footer and Lázaro widget:** `src/partials/*.html`, pulled into every page with `<!-- @include nav -->` etc.
 - **Services and prices:** `src/data/services.js`. The rates page and Lázaro both read from it, so a price changes in one place.
 - **Home hero:** `src/hero.js`. The film plays through the letters of ALHAMBRA cut out of a sheet of paper; on scroll the camera flies into the H while the film pulls back. Letters fit any screen (one line when wide, AL / HAM / BRA on phones).
@@ -42,6 +49,7 @@ Any new folder with an `index.html` becomes a page automatically.
 
 `api/spirit.js` is a Vercel function that answers visitors with the haras' information and rates as context. Its logo is the animated horse in `src/partials/spirit.html` (styles under "Lázaro's logo" in `src/style.css`).
 
+- **Languages:** replies in the visitor's language (Spanish, English, Portuguese, Arabic or Chinese), always politely (usted in Spanish, 您 in Chinese); very short messages get the page's language.
 - **Model:** NVIDIA Nemotron (`nvidia/nemotron-3-ultra-550b-a55b`) through NVIDIA's OpenAI-compatible API, with thinking off so replies come back in a couple of seconds.
 - **Key:** `NVIDIA_API_KEY` in Vercel → Project → Settings → Environment Variables (never in the code).
 - **Optional backup:** if `ANTHROPIC_API_KEY` is also set, Claude answers whenever NVIDIA fails.
