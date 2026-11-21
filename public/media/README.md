@@ -8,7 +8,7 @@ Crops are chosen so the whole horse and rider stay visible on desktop and phones
 | --- | --- | --- | --- |
 | `hero.mp4`, `hero.jpg` | Home opening film | `rainy-days.mp4`, `video-poster-rain.jpg` | full screen |
 | `origen.webp` | Chapter I arch | `facility-paddock-palms` | 4:5 |
-| `arabe.webp`, `pre.webp`, `hispano.webp` | Bloodline panels | `breeding-black-stallion`, `hero-main`, `ig-champion` | 4:3 |
+| `arabe.webp`, `pre.webp`, `hispano.webp` | Bloodline panels | gallery `g08`, `hero-main`, `ig-champion` | 4:3 |
 | `filosofia.webp` | Philosophy banner | gallery `g85` | 16:9 |
 | `pilar-*.webp` | Philosophy 3D cards | `g83`, `j-golden-petting`, `hero-main` | 3:4 |
 | `slow-1…3.webp` | "A day at La Alhambra" | `j-pergola-rainbow`, `journal-dressage-poster`, gallery `g07` | original (shown whole over a blurred copy when the screen shape would crop it) |
