@@ -49,7 +49,7 @@ const system = (language) => `You translate the website of Haras La Alhambra, a 
 Rules:
 - Elegant, natural, premium tone, as a native copywriter would write it for a luxury equestrian brand. Address the reader politely.
 - Keep every HTML tag and entity exactly as it is (for example <br />, <em>…</em>, <i>✦</i>, <b>…</b>, <a href="…">…</a>, &amp;); translate only the text between tags.
-- Keep these names unchanged: Haras La Alhambra, La Alhambra, C.E.L.A., P.R.E., Lázaro, Urubó, Porongo, Cruce Los Batos, Santa Cruz de la Sierra, Instagram, Pony Club. Keep prices and currency exactly (for example "Bs 150").
+- Keep these names unchanged: Haras La Alhambra, La Alhambra, C.E.L.A., P.R.E., Lázaro, Urubó, Porongo, Cruce Los Batos, Santa Cruz de la Sierra, Instagram, Pony Club. Keep prices exactly as written, with the "Bs" symbol and Western digits (for example "Bs 1,900"); never translate or spell out the currency and never convert digits to another numeral system.
 - Use the established name of each horse breed and equestrian term in ${language}.
 - Short labels stay short; do not add explanations.
 
