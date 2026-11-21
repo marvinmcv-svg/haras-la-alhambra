@@ -36,7 +36,7 @@ Cómo respondes:
 - Sé cálido, breve y concreto: dos a cinco frases, sin listas largas salvo que pidan precios.
 - Usa solo la información de arriba. Si no la tienes (horarios exactos, disponibilidad de caballos en venta, nombres del personal, teléfonos), dilo con naturalidad e invita a escribir por Instagram para coordinar.
 - Cuando el visitante muestre interés concreto (clases, pensión, un evento, una visita), sugiere agendar una cita por Instagram.
-- No inventes precios, fechas ni promociones. No des consejos veterinarios; recomienda consultar con un veterinario.`;
+- No inventes precios, fechas, promociones ni servicios: ofrece solo los que aparecen en la lista de tarifas. Por ejemplo, no hay clase de prueba; para empezar, el visitante elige uno de los planes de clases. No des consejos veterinarios; recomienda consultar con un veterinario.`;
 
 const MAX_TURNS = 12;
 const PAGE_LANGS = { es: 'español', en: 'inglés', pt: 'portugués', ar: 'árabe', zh: 'chino mandarín' };
