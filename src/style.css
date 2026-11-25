@@ -32,7 +32,9 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { -webkit-text-size-adjust: 100%; }
+/* The page can never be wider than the screen: anything that pokes out sideways is clipped,
+   so phones never zoom out or scroll sideways. */
+html { -webkit-text-size-adjust: 100%; overflow-x: hidden; overflow-x: clip; }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
@@ -45,6 +47,8 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overflow-x: clip;
+  max-width: 100%;
 }
 body.is-loading, body.menu-open { overflow: hidden; }
 
