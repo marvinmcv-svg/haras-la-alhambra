@@ -483,7 +483,7 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 
 /* ---------- Education ---------- */
 .edu { padding: var(--section) var(--gutter); max-width: var(--max); margin: 0 auto; }
-.edu__grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(36px, 6vw, 110px); align-items: center; }
+.edu__grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(36px, 6vw, 110px); align-items: center; }
 .edu__media { aspect-ratio: 4 / 5; border-radius: var(--radius); max-width: 520px; width: 100%; overflow: visible; }
 .edu__media img { border-radius: var(--radius); }
 .edu__badge {
@@ -498,7 +498,7 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 .edu__actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
 .edu .programs-grid { margin-top: clamp(70px, 10vh, 120px); }
 @media (max-width: 960px) {
-  .edu__grid { grid-template-columns: 1fr; }
+  .edu__grid { grid-template-columns: minmax(0, 1fr); }
   .edu__media { max-width: 440px; }
   .edu__badge { right: 12px; width: 112px; height: 112px; }
 }
