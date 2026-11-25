@@ -929,7 +929,9 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 .svc { position: relative; padding-bottom: var(--section); }
 .svc__band { position: relative; height: min(78vh, 52vw); min-height: 420px; overflow: hidden; }
 .svc__band img { object-position: var(--pos, 50% 50%); transform-origin: 50% 50%; }
-.svc__band::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, rgba(15,13,11,0.92) 0%, rgba(15,13,11,0.7) 38%, rgba(15,13,11,0.1) 75%), linear-gradient(0deg, var(--ink) 0%, rgba(15,13,11,0) 42%); }
+/* The dark fade behind the heading. It reuses .media's ::after, so undo the
+   placeholder-label styles and keep it shown after the image loads. */
+.svc__band.media::after, .svc__band.media.is-loaded::after { display: block; content: ''; position: absolute; inset: 0; transform: none; width: auto; z-index: 1; pointer-events: none; background: linear-gradient(90deg, rgba(15,13,11,0.92) 0%, rgba(15,13,11,0.7) 38%, rgba(15,13,11,0.1) 75%), linear-gradient(0deg, var(--ink) 0%, rgba(15,13,11,0) 42%); }
 .svc__head { position: absolute; z-index: 2; left: 0; right: 0; top: 50%; transform: translateY(-62%); padding: 0 var(--gutter); max-width: var(--max); margin: 0 auto; }
 .svc__num { font-family: var(--serif); font-size: clamp(64px, 8vw, 128px); line-height: 0.8; font-weight: 300; color: transparent; -webkit-text-stroke: 1px rgba(227, 201, 149, 0.6); display: block; margin-bottom: 18px; }
 .svc__title { font-family: var(--serif); font-weight: 300; font-size: clamp(42px, 5.6vw, 92px); line-height: 0.98; letter-spacing: -0.02em; max-width: 12ch; }
@@ -962,6 +964,35 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
   .pillar-nav { top: 0; justify-content: flex-start; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; max-width: none; padding-top: 12px; padding-bottom: 12px; background: rgba(15,13,11,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
   .nav:not(.is-hidden) ~ main .pillar-nav { top: 68px; }
   .pillar-nav a { flex-shrink: 0; }
+}
+/* Phones: a lighter, scannable price list. Shorter photo bands with the
+   heading on a dark fade, compact cards, and the badge set above the title. */
+@media (max-width: 600px) {
+  .pillar-nav { gap: 6px; padding-top: 10px; padding-bottom: 10px;
+    -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+  .pillar-nav a { padding: 8px 14px; font-size: 10px; letter-spacing: 0.12em; }
+  .svc { padding-bottom: 56px; }
+  .svc__band { height: auto; min-height: 0; padding-top: 150px; }
+  .svc__band > img { position: absolute; inset: 0; }
+  .svc__band.media::after, .svc__band.media.is-loaded::after { background: linear-gradient(0deg, var(--ink) 0%, rgba(15,13,11,0.86) 38%, rgba(15,13,11,0.2) 78%, rgba(15,13,11,0) 100%); }
+  .svc__head { position: relative; inset: auto; transform: none; padding-bottom: 24px; }
+  .svc__num { font-size: 36px; margin-bottom: 8px; }
+  .svc__title { font-size: 34px; max-width: none; }
+  .svc__intro { margin-top: 10px; font-size: 14px; line-height: 1.55; color: var(--sand); }
+  .svc__cards { margin-top: 0; gap: 10px; }
+  .svc-card { padding: 20px 20px 18px; border-radius: var(--radius); box-shadow: 0 20px 40px -30px rgba(0,0,0,0.9); }
+  .svc-card:hover { transform: none; }
+  .svc-card__flag { position: static; justify-self: start; margin-bottom: 10px; }
+  .svc-card--featured .svc-card__title { padding-right: 0; }
+  .svc-card__title { font-size: 22px; }
+  .svc-card__desc { font-size: 13.5px; line-height: 1.55; margin: 6px 0 14px; }
+  /* Price on the left, "Consultar" on the right, on one shared line. */
+  .svc-card { display: grid; grid-template-columns: minmax(0, 1fr) auto; }
+  .svc-card > :not(.svc-card__price, .svc-card__cta) { grid-column: 1 / -1; }
+  .svc-card__price { flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 6px; padding-top: 14px; }
+  .svc-card__amount { font-size: 28px; }
+  .svc-card__unit { font-size: 9.5px; letter-spacing: 0.12em; }
+  .svc-card__cta { margin: 0; padding: 14px 0 2px 12px; border-top: 1px solid var(--line); align-self: stretch; align-items: flex-end; font-size: 10px; letter-spacing: 0.18em; white-space: nowrap; }
 }
 .breed-section--tint { background: var(--ink-2); }
 .page-hero + .breed-section { margin-top: var(--section); }
