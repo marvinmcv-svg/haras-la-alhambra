@@ -11,6 +11,7 @@ export function initPricing(lang) {
   if (!root) return;
   const amount = (item) => {
     if (item.price == null) return pick(UI.onRequest);
+    if (item.price === 0) return pick(UI.free);
     const n = item.price.toLocaleString(langInfo(lang).number);
     return `${item.from ? `<small>${pick(UI.from)}</small>` : ''}Bs ${n}`;
   };

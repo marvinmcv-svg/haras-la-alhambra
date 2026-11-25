@@ -23,7 +23,7 @@ Sobre el haras:
 - Instalaciones: 11 potreros arbolados, 5 paddocks, 50 boxes, picadero cubierto, pista verde, pista de doma e instalaciones veterinarias propias.
 - Centro Ecuestre La Alhambra (C.E.L.A.): escuela de equitación para todas las edades, instrucción personalizada, entrenamiento de caballos, pensión, alquiler de pistas.
 - Filosofía: selección, manejo y entrenamiento. Primero la confianza; nada se fuerza.
-- Eventos: galas y cenas bajo carpas, espectáculos ecuestres, paseos de caballos entre los invitados y lanzamientos de marcas. En 2025 fue sede del circuito de Concursos de Adiestramiento (del 1.º, el 22 de marzo, al 5.º, el 2 de agosto), con entrada libre.
+- Eventos: galas y cenas bajo carpas, espectáculos ecuestres y lanzamientos de marcas. En 2025 fue sede del circuito de Concursos de Adiestramiento (del 1.º, el 22 de marzo, al 5.º, el 2 de agosto), con entrada libre.
 - Las visitas son solo con cita previa. El contacto es por Instagram (@haraslaalhambra.bo) o Facebook (HarasLaAlhambra). Página de tarifas: /servicios/. Página de la escuela: /educacion/.
 
 Tarifas de referencia en bolivianos (Bs). Pueden cambiar; la confirmación final la da el equipo:

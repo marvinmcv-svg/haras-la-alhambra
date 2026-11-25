@@ -755,7 +755,8 @@ em { font-style: italic; color: var(--gold-2); font-weight: 300; }
 .spirit__form input { flex: 1; min-width: 0; height: 44px; padding: 0 14px; border-radius: 999px; background: var(--ink-3); font-size: 15px; }
 .spirit__form input::placeholder { color: var(--muted); }
 .spirit__form button { width: 44px; height: 44px; border-radius: 50%; background: var(--gold); color: var(--ink); font-size: 18px; }
-@media (max-width: 480px) { .spirit__toggle > span:not(.spirit__avatar) { display: none; } .spirit__toggle { padding: 0 6px; } }
+/* Phones: keep Lázaro's name on the button, in a slightly more compact pill. */
+@media (max-width: 480px) { .spirit__toggle { height: 48px; gap: 8px; padding: 0 16px 0 5px; font-size: 11px; letter-spacing: 0.14em; } .spirit__toggle .spirit__avatar { width: 38px; height: 38px; } }
 
 /* ---------- Reduced motion ---------- */
 .reduced .lineages { overflow-x: auto; }

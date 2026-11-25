@@ -8,6 +8,7 @@ const STORE = 'hla-spirit';
 
 const price = (item) => {
   if (item.price == null) return pick(UI.onRequest);
+  if (item.price === 0) return pick(UI.free);
   return `${item.from ? pick(UI.from) + ' ' : ''}Bs ${item.price.toLocaleString(langInfo().number)}`;
 };
 

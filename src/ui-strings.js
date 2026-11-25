@@ -8,6 +8,7 @@ export const UI = {
   services: { es: 'Servicios', en: 'Services' },
   mostChosen: { es: 'El más elegido', en: 'Most chosen' },
   onRequest: { es: 'A cotizar', en: 'On request' },
+  free: { es: 'Sin costo', en: 'Free of charge' },
   tailored: { es: 'Propuesta a medida', en: 'Tailored proposal' },
   from: { es: 'Desde', en: 'From' },
   askAbout: { es: 'Consultar', en: 'Ask about it' },
@@ -26,8 +27,8 @@ export const UI = {
   chatSchoolMore: { es: 'Más detalles en <a href="/educacion/">Educación</a>.', en: 'More on the <a href="/educacion/">Education</a> page.' },
   chatHorse: { es: 'Para su caballo ofrecemos:', en: 'For your horse we offer:' },
   chatEvents: {
-    es: 'Organizamos galas, cenas bajo carpas, espectáculos y paseos de caballos entre los invitados:',
-    en: 'We host galas, dinners under canopies, shows and horses walking among guests:',
+    es: 'Organizamos galas, cenas bajo carpas y espectáculos ecuestres:',
+    en: 'We host galas, dinners under canopies and equestrian shows:',
   },
   chatEventsMore: { es: 'Vea más en <a href="/noches/">Noches</a>.', en: 'See more on <a href="/noches/">Nights</a>.' },
   chatVisit: {
